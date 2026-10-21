@@ -1,7 +1,7 @@
 {
   "name": "HoardFinder",
-  "version_number": "1.4.0",
-  "website_url": "",
+  "version_number": "1.4.1",
+  "website_url": "https://github.com/RodrigoPiston/HoardFinder",
   "description": "Find any item in nearby chests, carts, ships, tombstones and BetrValheim drawers. Sort and filter by type, source or mod, then highlight every match, even through walls. Client-side, read-only, 36 languages.",
   "dependencies": [
     "denikson-BepInExPack_Valheim-5.4.2351"

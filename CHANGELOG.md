@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.4.1
+
+- Darker window background and search field for easier reading.
+- Fixed: a printable shortcut (for example a bare comma) no longer types its character into the search field.
+- The compiled DLL no longer contains local build paths.
+- Screenshots and project link on the mod page.
+
 ## 1.4.0
 
 - Renamed from BetrDrawerFinder to HoardFinder, since it now searches all storage and not only BetrValheim drawers.

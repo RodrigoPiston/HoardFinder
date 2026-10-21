@@ -16,7 +16,10 @@
     <GenerateDocumentationFile>false</GenerateDocumentationFile>
     <CopyLocalLockFileAssemblies>false</CopyLocalLockFileAssemblies>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-    <Version>1.4.0</Version>
+    <Version>1.4.1</Version>
+    <!-- Keep local paths (user name, home folder) out of the compiled DLL and PDB. -->
+    <PathMap>$(MSBuildProjectDirectory)=/_/HoardFinder</PathMap>
+    <Deterministic>true</Deterministic>
 
     <ValheimDir Condition="'$(ValheimDir)' == '' and '$(VALHEIM_DIR)' != ''">$(VALHEIM_DIR)</ValheimDir>
     <ValheimDir Condition="'$(ValheimDir)' == ''">$(HOME)/.local/share/Steam/steamapps/common/Valheim</ValheimDir>

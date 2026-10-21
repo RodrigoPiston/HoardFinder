@@ -10,11 +10,11 @@ It only runs on your client and never touches your items. Formerly published as 
 
 ![The search window](screenshots/window.png)
 
-![Sorting by mod with the type filter on Materials](screenshots/filters.png)
+![Sorted by mod and filtered to the items added by Monstrum](screenshots/filters.png)
 
-![Highlighted chests, visible through a wall](screenshots/highlight.png)
+![Two drawers holding Fox Pelt, marked with the amount and distance](screenshots/highlight.png)
 
-![Several items highlighted at once, one color each](screenshots/multi.png)
+![A chest and a drawer with Barley Flour, each with its own beam and marker](screenshots/storage.png)
 
 ## Features
 

@@ -7,9 +7,9 @@ you do not need (`Ctrl + F3` hides the HUD in vanilla).
 | File | What to show |
 |---|---|
 | `window.png` | The search window open over your base with a query typed, for example `iron`, and several results. |
-| `filters.png` | The window sorted by Mod with the Type filter on Materials, so modded items and their mod tags show. |
-| `highlight.png` | A highlight active with a wall between you and the chests, so the markers show through it. |
-| `multi.png` | `Shift + Enter` on a broad search (`ore` or `metal`) so several colors show at once. |
+| `filters.png` | The window sorted by Mod with the Mod filter on one mod, so the mod tags show. |
+| `highlight.png` | A highlight active on a wall of drawers, with the markers showing amount and distance. |
+| `storage.png` | A highlight that covers a chest and a drawer at once, with beams. |
 
 Optional extras: a non-English language (Settings, Misc, Language) and the in-game shortcut change.
 

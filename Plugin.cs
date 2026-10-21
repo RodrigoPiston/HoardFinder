@@ -23,7 +23,7 @@ namespace HoardFinder
     {
         public const string Guid = "heido.valheim.hoardfinder";
         public const string Name = "HoardFinder";
-        public const string Version = "1.4.0";
+        public const string Version = "1.4.1";
         private const string JotunnGuid = "com.jotunn.jotunn";
         private const string LegacyGuid = "heido.valheim.betrdrawerfinder";
 

@@ -181,7 +181,7 @@ namespace HoardFinder.UI
         /// </summary>
         private bool ConsumeKey(Event e)
         {
-            if (Time.frameCount == _openedFrame)
+            if (Time.frameCount == _openedFrame || IsHotkeyCharacter(e))
             {
                 return true;
             }
@@ -200,6 +200,22 @@ namespace HoardFinder.UI
                 HotkeyText = HotkeyCapture.Format(saved.Value);
                 _notify(Tr.F("hotkey_saved", HotkeyText));
             }
+        }
+
+        /// <summary>
+        /// A printable hotkey (for example a bare comma) also produces a character event, which can arrive a frame
+        /// after the key press. Drop it during the first frames so the key that opened the window is not typed.
+        /// </summary>
+        private bool IsHotkeyCharacter(Event e)
+        {
+            const int GraceFrames = 3;
+            if (Time.frameCount > _openedFrame + GraceFrames)
+            {
+                return false;
+            }
+            int key = (int)_config.OpenSearchHotkey.Value.MainKey;
+            bool printable = key >= 32 && key < 127;
+            return e.keyCode == (KeyCode)key || (printable && char.ToLowerInvariant(e.character) == (char)key);
         }
 
         private bool IsHotkeyEvent(Event e)
