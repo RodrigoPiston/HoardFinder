@@ -1,0 +1,103 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    Builds against the local game install and the r2modman BepInEx profile. Override with
+    -p:ValheimDir=... and -p:BepInExDir=... (or VALHEIM_DIR / BEPINEX_DIR) when they live elsewhere.
+    dotnet build -c Release -p:Deploy=true copies the DLL into BepInEx/plugins/HoardFinder.
+  -->
+  <PropertyGroup>
+    <TargetFramework>net48</TargetFramework>
+    <AssemblyName>HoardFinder</AssemblyName>
+    <RootNamespace>HoardFinder</RootNamespace>
+    <LangVersion>latest</LangVersion>
+    <Nullable>disable</Nullable>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <GenerateDocumentationFile>false</GenerateDocumentationFile>
+    <CopyLocalLockFileAssemblies>false</CopyLocalLockFileAssemblies>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <Version>1.4.0</Version>
+
+    <ValheimDir Condition="'$(ValheimDir)' == '' and '$(VALHEIM_DIR)' != ''">$(VALHEIM_DIR)</ValheimDir>
+    <ValheimDir Condition="'$(ValheimDir)' == ''">$(HOME)/.local/share/Steam/steamapps/common/Valheim</ValheimDir>
+    <ManagedDir>$(ValheimDir)/valheim_Data/Managed</ManagedDir>
+    <R2ModmanProfile Condition="'$(R2ModmanProfile)' == ''">$(HOME)/.config/r2modmanPlus-local/Valheim/profiles/Default</R2ModmanProfile>
+    <BepInExDir Condition="'$(BepInExDir)' == '' and '$(BEPINEX_DIR)' != ''">$(BEPINEX_DIR)</BepInExDir>
+    <BepInExDir Condition="'$(BepInExDir)' == '' and Exists('$(R2ModmanProfile)/BepInEx/core')">$(R2ModmanProfile)/BepInEx</BepInExDir>
+    <BepInExDir Condition="'$(BepInExDir)' == ''">$(ValheimDir)/BepInEx</BepInExDir>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.3" PrivateAssets="all" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="BepInEx" HintPath="$(BepInExDir)/core/BepInEx.dll" Private="false" />
+    <Reference Include="0Harmony" HintPath="$(BepInExDir)/core/0Harmony.dll" Private="false" />
+    <Reference Include="assembly_valheim" HintPath="$(ManagedDir)/assembly_valheim.dll" Private="false" />
+    <Reference Include="assembly_guiutils" HintPath="$(ManagedDir)/assembly_guiutils.dll" Private="false" />
+    <Reference Include="assembly_utils" HintPath="$(ManagedDir)/assembly_utils.dll" Private="false" />
+    <Reference Include="UnityEngine" HintPath="$(ManagedDir)/UnityEngine.dll" Private="false" />
+    <Reference Include="UnityEngine.CoreModule" HintPath="$(ManagedDir)/UnityEngine.CoreModule.dll" Private="false" />
+    <Reference Include="UnityEngine.IMGUIModule" HintPath="$(ManagedDir)/UnityEngine.IMGUIModule.dll" Private="false" />
+    <Reference Include="UnityEngine.InputLegacyModule" HintPath="$(ManagedDir)/UnityEngine.InputLegacyModule.dll" Private="false" />
+    <Reference Include="UnityEngine.TextRenderingModule" HintPath="$(ManagedDir)/UnityEngine.TextRenderingModule.dll" Private="false" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="docs/**" />
+    <!-- UI translations, one file per Valheim language name; loaded by I18n/Tr.cs. -->
+    <EmbeddedResource Include="I18n/*.txt" LogicalName="HoardFinder.I18n.%(Filename).txt" />
+  </ItemGroup>
+
+  <Target Name="DeployToGame" AfterTargets="Build" Condition="'$(Deploy)' == 'true'">
+    <Error Condition="!Exists('$(BepInExDir)/core')" Text="BepInEx is not installed in $(BepInExDir)." />
+    <Copy SourceFiles="$(OutDir)HoardFinder.dll" DestinationFolder="$(BepInExDir)/plugins/HoardFinder" />
+    <Message Importance="high" Text="HoardFinder deployed to $(BepInExDir)/plugins/HoardFinder" />
+  </Target>
+
+  <!-- WriteLinesToFile always adds a UTF-8 BOM; Thunderstore's validator prefers plain UTF-8. -->
+  <UsingTask TaskName="WriteTextNoBom" TaskFactory="RoslynCodeTaskFactory"
+             AssemblyFile="$(MSBuildToolsPath)/Microsoft.Build.Tasks.Core.dll">
+    <ParameterGroup>
+      <Path ParameterType="System.String" Required="true" />
+      <Text ParameterType="System.String" Required="true" />
+    </ParameterGroup>
+    <Task>
+      <Code Type="Fragment" Language="cs">
+        System.IO.File.WriteAllText(Path, Text, new System.Text.UTF8Encoding(false));
+      </Code>
+    </Task>
+  </UsingTask>
+
+  <!--
+    dotnet build -c Release -t:Package [-p:ScreenshotBaseUrl=https://.../screenshots]
+    Builds bin/thunderstore/HoardFinder-<Version>.zip. See docs/DEVELOPMENT.md.
+  -->
+  <Target Name="Package" DependsOnTargets="Build">
+    <PropertyGroup>
+      <ThunderstoreDir>$(MSBuildProjectDirectory)/thunderstore</ThunderstoreDir>
+      <PackageOutDir>$(MSBuildProjectDirectory)/bin/thunderstore</PackageOutDir>
+      <PackageStaging>$(PackageOutDir)/HoardFinder-$(Version)</PackageStaging>
+      <ManifestText>$([System.IO.File]::ReadAllText('$(ThunderstoreDir)/manifest.json'))</ManifestText>
+      <ManifestVersion>$([System.Text.RegularExpressions.Regex]::Match($(ManifestText), '"version_number"\s*:\s*"([^"]+)"').Groups[1].Value)</ManifestVersion>
+      <ReadmeText>$([System.IO.File]::ReadAllText('$(MSBuildProjectDirectory)/README.md'))</ReadmeText>
+      <ReadmeText Condition="'$(ScreenshotBaseUrl)' != ''">$(ReadmeText.Replace('](screenshots/', ']($(ScreenshotBaseUrl.TrimEnd('/'))/'))</ReadmeText>
+      <!-- Without a public URL the images cannot render on Thunderstore, so the Screenshots section is left out. -->
+      <ReadmeText Condition="'$(ScreenshotBaseUrl)' == ''">$([System.Text.RegularExpressions.Regex]::Replace($(ReadmeText), '## Screenshots[\s\S]*?(?=\n## )', ''))</ReadmeText>
+    </PropertyGroup>
+    <Error Condition="'$(ManifestVersion)' != '$(Version)'"
+           Text="thunderstore/manifest.json version_number ($(ManifestVersion)) differs from the csproj Version ($(Version))." />
+    <Warning Condition="'$(ScreenshotBaseUrl)' == ''"
+             Text="ScreenshotBaseUrl not set: the Screenshots section is left out of the packaged README." />
+    <MakeDir Directories="$(PackageStaging)/plugins" />
+    <Copy SourceFiles="$(ThunderstoreDir)/manifest.json;$(ThunderstoreDir)/icon.png;$(MSBuildProjectDirectory)/CHANGELOG.md"
+          DestinationFolder="$(PackageStaging)" />
+    <Copy SourceFiles="$(OutDir)HoardFinder.dll" DestinationFolder="$(PackageStaging)/plugins" />
+    <WriteTextNoBom Path="$(PackageStaging)/README.md" Text="$(ReadmeText)" />
+    <ZipDirectory SourceDirectory="$(PackageStaging)" DestinationFile="$(PackageOutDir)/HoardFinder-$(Version).zip"
+                  Overwrite="true" />
+    <Message Importance="high" Text="Thunderstore package: $(PackageOutDir)/HoardFinder-$(Version).zip" />
+  </Target>
+
+</Project>

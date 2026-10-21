@@ -1,0 +1,9 @@
+/home/rpiston/Projects/BetrDrawer/BetrDrawerFinder/obj/Release/BetrDrawerFinder.csproj.AssemblyReference.cache
+/home/rpiston/Projects/BetrDrawer/BetrDrawerFinder/obj/Release/BetrDrawerFinder.GeneratedMSBuildEditorConfig.editorconfig
+/home/rpiston/Projects/BetrDrawer/BetrDrawerFinder/obj/Release/BetrDrawerFinder.AssemblyInfoInputs.cache
+/home/rpiston/Projects/BetrDrawer/BetrDrawerFinder/obj/Release/BetrDrawerFinder.AssemblyInfo.cs
+/home/rpiston/Projects/BetrDrawer/BetrDrawerFinder/obj/Release/BetrDrawerFinder.csproj.CoreCompileInputs.cache
+/home/rpiston/Projects/BetrDrawer/BetrDrawerFinder/bin/Release/BetrDrawerFinder.dll
+/home/rpiston/Projects/BetrDrawer/BetrDrawerFinder/bin/Release/BetrDrawerFinder.pdb
+/home/rpiston/Projects/BetrDrawer/BetrDrawerFinder/obj/Release/BetrDrawerFinder.dll
+/home/rpiston/Projects/BetrDrawer/BetrDrawerFinder/obj/Release/BetrDrawerFinder.pdb
