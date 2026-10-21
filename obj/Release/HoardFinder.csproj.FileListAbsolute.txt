@@ -1,9 +1,0 @@
-/home/rpiston/Projects/BetrDrawer/HoardFinder/bin/Release/HoardFinder.dll
-/home/rpiston/Projects/BetrDrawer/HoardFinder/bin/Release/HoardFinder.pdb
-/home/rpiston/Projects/BetrDrawer/HoardFinder/obj/Release/HoardFinder.csproj.AssemblyReference.cache
-/home/rpiston/Projects/BetrDrawer/HoardFinder/obj/Release/HoardFinder.GeneratedMSBuildEditorConfig.editorconfig
-/home/rpiston/Projects/BetrDrawer/HoardFinder/obj/Release/HoardFinder.AssemblyInfoInputs.cache
-/home/rpiston/Projects/BetrDrawer/HoardFinder/obj/Release/HoardFinder.AssemblyInfo.cs
-/home/rpiston/Projects/BetrDrawer/HoardFinder/obj/Release/HoardFinder.csproj.CoreCompileInputs.cache
-/home/rpiston/Projects/BetrDrawer/HoardFinder/obj/Release/HoardFinder.dll
-/home/rpiston/Projects/BetrDrawer/HoardFinder/obj/Release/HoardFinder.pdb
